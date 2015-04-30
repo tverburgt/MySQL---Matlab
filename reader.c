@@ -1,25 +1,7 @@
-/*#include <stdio>
-
-int main()
-{
-	FILE fp;
-	int i;
-	fp = fopen("hello.csv","w");
-	
-	if (fp)
-	{
-		for(i=0;i<10;i++)
-		{
-			fprintf(fp,"%d,%d\n", i, 5*i);
-		{
-	}
-}
-
-*/
-
+#include <stdio.h>
 #include <my_global.h>
 #include <mysql.h>
-#include <stdio.h>
+
 
 void finish_with_error(MYSQL *con)
 {
@@ -28,77 +10,73 @@ void finish_with_error(MYSQL *con)
   exit(1);        
 }
 
+
 int main(int argc, char **argv)
-{      
+{  
+  
   MYSQL *con = mysql_init(NULL);
-  
-  if (con == NULL)
+
+  if (con == NULL) 
   {
-      fprintf(stderr, "mysql_init() failed\n");
+      fprintf(stderr, "%s\n", mysql_error(con));
       exit(1);
-  }  
-  
-  if (mysql_real_connect(con, "127.0.0.1", "root", "root", 
+  }
+
+  if (mysql_real_connect(con, "localhost", "root", "root", 
           "process_control", 0, NULL, 0) == NULL) 
   {
-      finish_with_error(con);
-  }    
-  
+      finish_with_error(con); 
+  }  
+
   if (mysql_query(con, "SELECT * FROM mixer_temp")) 
   {
       finish_with_error(con);
   }
   
-  //This structure represents the result of a query that 
-  //returns rows (SELECT, SHOW, DESCRIBE, EXPLAIN).
-  MYSQL_RES *result = mysql_store_result(con);
+  MYSQL_RES *result = mysql_store_result(con); // getting the result set
   
-
-  //If result equals NULL, throw error message.
   if (result == NULL) 
   {
       finish_with_error(con);
   }
 
-  //This give the number of row within result.
-  int num_fields = mysql_num_fields(result);
 
-
-
-  //This is a type-safe representation of one row of data. It 
-  //is currently implemented as an array of counted byte 
-  //strings. Rows are obtained using mysql_fetch_row().
-  MYSQL_ROW row;  //Number of fields (columns).
+  int num_fields = mysql_num_fields(result);  // We get number of fields (columns) in the table
+  MYSQL_ROW row;
+  int i=0;
+  FILE *fp=fopen("hello.csv","w");
   
-
-
-  FILE *fp = fopen("hello.csv","w");
-  int i;
-  
-
-  if(fp)
-  {
-  	while ((row = mysql_fetch_row(result))) 
-  		{ 
-      		for(i = 0; i < num_fields; i++) 
-      		{ 
-      			//fprintf(fp,"%d,%d\n", i, 5*i);
-      			//fprintf(fp, "%s\n", row[i]);
-          		fprintf(fp,"%s", row[i] ? row[i] : "NULL");
-          		//if(!(i%2 == 0) )
-          		//fprintf(fp,"\n");
-
-          			
-      		} 
-          fprintf(fp, "\n"); 
-  		}
-  }
  
-  fclose(fp);
+ 
   
+  while ((row = mysql_fetch_row(result))) 
+  { 
+      for(i = 0; i < num_fields; i++) 
+      { 
+          
+        if(i==0 )
+        {
+       
+        printf("%s %c", row[i] ? row[i] : "NULL",',');
+        fprintf(fp,"%s %c", row[i] ? row[i] : "NULL",',');
+        }
+        
+        else if (i==1)
+        {
+        printf(" %s", row[i] ? row[i] : "NULL");
+        fprintf(fp," %s", row[i] ? row[i] : "NULL");
+    }
+      
+      } 
+          fprintf(fp,"\n");
+          printf("\n"); 
+  }
+  
+  
+  fclose(fp);
   mysql_free_result(result);
   mysql_close(con);
   
   exit(0);
-}
-
+} 
+  
