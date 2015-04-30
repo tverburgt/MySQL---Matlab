@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <my_global.h>
 #include <mysql.h>
+#include <time.h>
 
 void put_temperature(MYSQL * con,double temperature)
 {
