@@ -31,6 +31,7 @@ int main()
 	for (i=0;i<100;i++)
 	{
 		put_temperature(con,sin(2.0*3.141592 * (double)i/100.0));
+		//Hello
 	}
 	mysql_close(con);
 	exit(0);
