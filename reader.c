@@ -70,9 +70,15 @@ int main(int argc, char **argv)
         if(i==0 )
         {
         //Timestamp is printed to the shell
+<<<<<<< HEAD
         printf("%s %c", row[i] ? row[i] : "NULL" ,',');
         //Timestamp is written to plot.csv
         fprintf(fp,"%s %c", row[i] ? row[i] : "NULL" ,',');
+=======
+        printf("%s %c", row[i] ? row[i] : "NULL", ',');
+        //Timestamp is written to plot.csv
+        fprintf(fp,"%s %c", row[i] ? row[i] : "NULL", ',');
+>>>>>>> d3ddb420e56889b16c27bdac6541ccf07080fe5c
         //Note: A comma is appended after each timestamp because
         //a comma represents a new column in a csv file. This 
         //allows the data value to be plotted in Octave.
