@@ -14,8 +14,7 @@ void finish_with_error(MYSQL *con)
 void put_temperature(MYSQL * con,double temperature)
 {
   char SQLString[100];
-  sprintf(SQLString,"INSERT INTO mixer_temp VALUES (NOW(),%f)",temperature);
-  printf("%s\n",SQLString);
+  sprintf(SQLString,"INSERT INTO mixer_temp VALUES (to_seconds(NOW()),%f)",temperature);
   if(mysql_query(con,SQLString))
   {
     printf("%s\n",mysql_error(con));
@@ -47,7 +46,7 @@ int main(int argc, char **argv)
       finish_with_error(con); 
   }
 
-  if (mysql_query(con, "CREATE TABLE mixer_temp(timestamp DATETIME, temperature FLOAT)")) 
+  if (mysql_query(con, "CREATE TABLE mixer_temp(timestamp BIGINT, temperature FLOAT)")) 
   {     
       finish_with_error(con);
   }

@@ -44,7 +44,7 @@ int main(int argc, char **argv)
   int num_fields = mysql_num_fields(result);  // We get number of fields (columns) in the table
   MYSQL_ROW row;
   int i=0;
-  FILE *fp=fopen("hello.csv","w");
+  FILE *fp=fopen("plot.csv","w");
   
  
  
